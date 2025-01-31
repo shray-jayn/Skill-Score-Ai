@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CoachingNumbers {
+  id                String  @id @default(uuid())
+  coachingRoundId   String? @db.Uuid
+  round             Int?
+  coachingStyle     String?
+  count             Int?
+  percentage        Float?
+  styleNumber       Int?
+  styleExplanation  String?
+  coachingSessionId String? @db.Uuid
+
+  // Foreign key relation
+  coachingSession   CoachingSessions? @relation(fields: [coachingRoundId], references: [coachingRoundId])
+}
+
+model CoachingRoundFeedback {
+  id                  String  @id @default(uuid())
+  coachingRoundId     String? @db.Uuid
+  round              Int?
+  feedbackImprovements String?
+  detailedAnalysis   String?
+  sectionNo         Int?
+
+  // Foreign key relation
+  coachingSession   CoachingSessions? @relation(fields: [coachingRoundId], references: [coachingRoundId])
+}
+
+model CoachingSessions {
+  coachingRoundId    String  @id @db.Uuid
+  coachingSessionId  String  @db.Uuid
+  coachingSessionName String @db.VarChar
+  coacheeName1      String? @db.VarChar
+  round            Int?
+  coacheeName2      String? @db.VarChar
+  coacheeName3      String? @db.VarChar
+  teamName         String? @db.VarChar
+  date            DateTime?
+  userId          String? @db.Uuid
+  coacheeName      String? @db.VarChar
+
+  // Reverse relations
+  coachingNumbers         CoachingNumbers[]
+  coachingRoundFeedbacks  CoachingRoundFeedback[]
+  coachingStyleFeedbacks  CoachingStyleFeedback[]  
+  coachingStyleTimecharts CoachingStyleTimechart[] 
+}
+
+model CoachingStyleFeedback {
+  id               String  @id @default(uuid())
+  coachingRoundId  String? @db.Uuid
+  round           Int?
+  coachingStyle   String?
+  styleNumber     Int?
+  styleExplanation String?
+
+  // Foreign key relation
+  coachingSession CoachingSessions? @relation(fields: [coachingRoundId], references: [coachingRoundId])
+}
+
+model CoachingStyleResults {
+  id               String  @id @default(uuid())
+  paragraphId      String  @db.Uuid
+  coachingRoundId  String? @db.Uuid
+  coachingStyle    String? @db.VarChar
+  transcribedText  String?
+  round           Int?
+
+  // Foreign key relation
+  transcriptionRaw TranscriptionRaw? @relation(fields: [paragraphId], references: [paragraphId])
+}
+
+model CoachingStyleTimechart {
+  id               String  @id @default(uuid())
+  coachingRoundId  String? @db.Uuid
+  round           Int?
+  coachingStyle   String?
+  section         Int?
+  coachingSessionId String? @db.Uuid
+
+  // Foreign key relation
+  coachingSession CoachingSessions? @relation(fields: [coachingRoundId], references: [coachingRoundId])
+}
+
+model TextChecking {
+  coachingRoundId   String  @db.Uuid
+  coachingSessionId String  @db.Uuid
+  text             String?
+
+  @@id([coachingRoundId, coachingSessionId])
+}
+
+model TranscriptionRaw {
+  paragraphId      String  @id @db.Uuid
+  coachingRoundId  String? @db.Uuid
+  speakerId       String? @db.VarChar
+  transcribedText String?
+  round           Int?
+
+  // Reverse relation
+  coachingStyleResults CoachingStyleResults[]
+}
+
+model UserData {
+  userId       String  @id @db.Uuid
+  email       String? @db.VarChar @unique
+  password    String? @db.VarChar
+  designation String? @db.VarChar
+  name        String? @db.VarChar
+  image       String? @db.VarChar
+}
