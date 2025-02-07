@@ -58,10 +58,10 @@ const RecentFilesTable: React.FC = () => {
   };
 
   const handleRowClick = (record: CoachingSession) => {
-    navigate(`/report/${record.coaching_round_id}`, {
-      state: { coachingSessionName: record.coaching_session_name },
-    });
-  };
+  navigate(`/report/${record.coaching_round_id}`, {
+    state: { ...record }, 
+  });
+};
 
   const columns = [
     {
@@ -74,7 +74,7 @@ const RecentFilesTable: React.FC = () => {
         title: "Coach",
         dataIndex: "coachee_name",
         key: "coachee_name",
-        render: (text: string) => <span>{text}</span>,
+        render: (text: string) => <span className="font-medium text-gray-700">{text}</span>,
     },
     {
         title: "Recording Date",
@@ -86,7 +86,7 @@ const RecentFilesTable: React.FC = () => {
         title: "Round",
         dataIndex: "round",
         key: "round",
-        render: (round: number) => <span>{round}</span>,
+        render: (round: number) => <span className="font-medium text-gray-700">{round}</span>,
     },
 ];
 
@@ -99,7 +99,7 @@ return (
                 pagination={{
                     current: pagination.offset / pagination.limit + 1,
                     pageSize: pagination.limit,
-                    total: 100,
+                    total: 500,
                 }}
                 rowKey={(record) => record.coaching_round_id}
                 onRow={(record) => ({

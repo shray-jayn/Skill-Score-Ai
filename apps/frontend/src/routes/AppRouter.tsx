@@ -7,8 +7,8 @@ import Home from "../pages/Home.page";
 import Login from "../pages/Login.page";
 import SignUp from "../pages/SignUp.page";
 import NotFound from "../pages/NotFound.page";
-import Favourite from "../pages/Favourite.page";
 import Report from "../pages/Report.page";
+import Upload from "../pages/Upload.page";
 
 // Component to protect private routes
 const RequireAuth: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -35,15 +35,15 @@ const AppRouter: React.FC = () => {
           path="/"
           element={
             <RequireAuth>
-              <Home />
+              <Upload/>
             </RequireAuth>
           }
         />
          <Route
-          path="/favourites"
+          path="/feedback"
           element={
             <RequireAuth>
-              <Favourite />
+              <Home />
             </RequireAuth>
           }
         />

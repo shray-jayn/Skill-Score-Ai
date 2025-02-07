@@ -54,8 +54,8 @@ const LoginComponent: React.FC = () => {
 
       <div className="w-full flex justify-center mb-12">
         <img
-          src=""
-          alt="Skill-Score-Ai"
+          src="https://www.graduatesfirst.com/wp-content/uploads/2024/02/IMD-Horizontal-Lockup-Blue-on-White-Safe-Space-RGB.jpg"
+          alt="Skill Score Ai"
           className="w-48"
         />
       </div>

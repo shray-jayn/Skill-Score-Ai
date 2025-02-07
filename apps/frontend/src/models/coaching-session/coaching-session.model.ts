@@ -16,9 +16,9 @@ export interface RoundFeedback {
 }
 
 export interface CoachingStyle {
-    coaching_style: string;
-    count: number;
-    percentage: number;
+    name: string;
+    value: number;
+   
 }
 
 export interface CoachingStyleTimechartData {
@@ -31,3 +31,6 @@ export interface TranscriptionData {
     speaker_id: string;
     transcribed_text: string;
 }
+
+
+ 

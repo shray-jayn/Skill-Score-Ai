@@ -20,13 +20,14 @@ import { authState } from "../recoil/atoms/auth.atom";
 const { Dragger } = Upload;
 const { Option } = Select;
 
-const UploadComponent: React.FC = () => {
+const UploadModalComponent: React.FC = () => {
   const [form] = Form.useForm();
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [coachingRound, setCoachingRound] = useState<string>("1");
   const [fileUrl,setFileUrl ] = useState<string>("");
   const [dropdownData, setDropdownData] = useState<FetchSessionsDropdownResponse["data"]>([]);
+  
   const auth = useRecoilValue(authState);
   
 
@@ -182,100 +183,174 @@ const UploadComponent: React.FC = () => {
       console.error("Error analyzing data:", error);
       message.error("Analysis failed.");
     }
-  };  
-
-
-
+  };
+  
   return (
-<Card style={{ maxWidth: 1200, margin: "auto", marginTop: 20, padding: 24 }}>
- 
-      <Form form={form} onFinish={handleAnalyze}  initialValues={{ coachingRound: "1" }} layout="vertical">
-        <Row gutter={32}>
-          {/* Left Section - Form Fields */}
-         <Col xs={24} md={12}>
-            <Row gutter={16}>
-              <Col xs={24} md={12}>
-                <Form.Item label="Recording Date" name="recordingDate" rules={[{ required: true, message: "Please select a recording date" }]}> 
-                  <DatePicker style={{ width: "100%" }} />
-                </Form.Item>
-              </Col>
-              <Col xs={24} md={12}>
-                <Form.Item label="Coaching Round" name="coachingRound"  rules={[{ required: true, message: "Please select a coaching round" }]}> 
-                  <Select placeholder="Select Coaching Round" style={{ width: "100%" }} onChange={(value) => {
+    <Card style={{ maxWidth: 800, margin: "auto", marginTop: 20 }}>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleAnalyze}
+        initialValues={{ coachingRound: "1" }}
+      >
+        <Form.Item
+          label="Recording Date"
+          name="recordingDate"
+          rules={[{ required: true, message: "Please select a recording date" }]}
+        >
+          <DatePicker style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item
+          label="Coaching Round"
+          name="coachingRound"
+          rules={[{ required: true, message: "Please select a coaching round" }]}
+        >
+          <Select
+            placeholder="Select Coaching Round"
+            style={{ width: "100%" }}
+            onChange={(value) => {
               setCoachingRound(value);
               if (value === "2") {
                 handleTableStats();
               }
-            }}>
-                    <Option value="1">Round 1</Option>
-                    <Option value="2">Round 2</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
+            }}
+          >
+            <Option value="1">Round 1</Option>
+            <Option value="2">Round 2</Option>
+          </Select>
+        </Form.Item>
 
-            <Form.Item label="Team Name" name="teamName"  rules={[{ required: true, message: "Please enter a team name" }]}> 
-              <Input placeholder="Enter Unique Team Name" onChange={(e) => handleTeamNameChange(e.target.value)} />
+        {coachingRound !== "2" && (
+          <>
+            <Form.Item
+              label="Team Name"
+              name="teamName"
+              rules={[{ required: true, message: "Please enter a team name" }]}
+            >
+              <Input
+                placeholder="Enter Unique Team Name"
+                onChange={(e) => handleTeamNameChange(e.target.value)}
+              />
             </Form.Item>
 
-             <Form.Item label="Coach Names" 
-                        >
-                          <Row gutter={[16, 16]}>
-                            <Col span={8}>
-                              <Form.Item
-                                name="coach1"
-                                rules={[{ required: true, message: "Please enter Coach Name 1" }]}
-                              >
-                                <Input placeholder="Coach Name 1" />
-                              </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                              <Form.Item
-                                name="coach2"
-                                rules={[{ required: true, message: "Please enter Coach Name 2" }]}
-                              >
-                                <Input placeholder="Coach Name 2" />
-                              </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                              <Form.Item
-                                name="coach3"
-                                rules={[{ required: true, message: "Please enter Coach Name 3" }]}
-                              >
-                                <Input placeholder="Coach Name 3" />
-                              </Form.Item>
-                            </Col>
-                          </Row>
-                        </Form.Item>
+            <Form.Item label="Coach Names" 
+            >
+              <Row gutter={[16, 16]}>
+                <Col span={8}>
+                  <Form.Item
+                    name="coach1"
+                    rules={[{ required: true, message: "Please enter Coach Name 1" }]}
+                  >
+                    <Input placeholder="Coach Name 1" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="coach2"
+                    rules={[{ required: true, message: "Please enter Coach Name 2" }]}
+                  >
+                    <Input placeholder="Coach Name 2" />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="coach3"
+                    rules={[{ required: true, message: "Please enter Coach Name 3" }]}
+                  >
+                    <Input placeholder="Coach Name 3" />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form.Item>
+          </>
+        )}
 
-            <Form.Item label="Language" name="language"  rules={[{ required: true, message: "Please select a language" }]}> 
-              <Select placeholder="Select a language" style={{ width: "100%" }}>
-                <Option value="english">English</Option>
-                <Option value="spanish">Spanish</Option>
+        {coachingRound === "2" && (
+          <>
+            <Form.Item label="Team Name" name="teamName" rules={[{ required: true }]}>
+              <Select placeholder="Select Team Name" style={{ width: "100%" }}>
+                {dropdownData.length > 0 ? (
+                  dropdownData.map((item) => (
+                    <Option key={item.coaching_session_name} value={item.coaching_session_name}>
+                      {item.coaching_session_name}
+                    </Option>
+                  ))
+                ) : (
+                  <Option value="" disabled>
+                    No Teams Available
+                  </Option>
+                )}
               </Select>
             </Form.Item>
-          </Col>
 
-          {/* Right Section - File Upload and Analyze Button */}
-          <Col xs={24} md={12} style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <Dragger  beforeUpload={(file) => {
+            <Form.Item label="Coach Names">
+              <Row gutter={[16, 16]}>
+                {["coach1", "coach2", "coach3"].map((coach, index) => (
+                  <Col span={8} key={coach}>
+                    <Form.Item
+                      name={coach}
+                      rules={[{ required: true, message: `Please select Coach Name ${index + 1}` }]}
+                    >
+                      <Select placeholder={`Coach Name ${index + 1}`} style={{ width: "100%" }}>
+                        {dropdownData.length > 0 ? (
+                          dropdownData.map((item) => (
+                            <Option key={`${coach}-${item.coaching_session_name}`} value={item.coaching_session_name}>
+                              {item.coaching_session_name}
+                            </Option>
+                          ))
+                        ) : (
+                          <Option value="" disabled>
+                            No Coaches Available
+                          </Option>
+                        )}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                ))}
+              </Row>
+            </Form.Item>
+          </>
+        )}
+
+
+        <Form.Item
+          label="Language"
+          name="language"
+          rules={[{ required: true, message: "Please select a language" }]}
+        >
+          <Select placeholder="Select a language" style={{ width: "100%" }}>
+            <Option value="english">English</Option>
+            <Option value="spanish">Spanish</Option>
+          </Select>
+        </Form.Item>
+
+        <Dragger
+          beforeUpload={(file) => {
             handleFileUpload(file); // Upload the file directly
             return false; // Prevent automatic upload
-          }} style={{ width: "100%", maxWidth: 500, height: 160, marginBottom: 16 }}>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">Click or drag file to upload</p>
-               <p className="ant-upload-hint">Support for a single upload. Avoid uploading sensitive data.</p>
-            </Dragger>
-            
-            <Button disabled={uploading} type="primary" htmlType="submit" style={{ marginTop: 70, width: "50%", minWidth: 140, height: 40, textAlign: "center" }}>Analyze</Button>
-          </Col>
-        </Row>
+          }}
+          style={{ marginTop: 20, marginBottom: 20 }}
+        >
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">Click or drag file to this area to upload</p>
+        </Dragger>
+
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ width: "100%" }}
+            disabled={uploading}
+          >
+            Analyze
+          </Button>
+        </Form.Item>
       </Form>
     </Card>
-
-  )
+  );
 };
 
-export default UploadComponent;
+export default UploadModalComponent;

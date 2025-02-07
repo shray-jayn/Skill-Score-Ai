@@ -1,216 +1,226 @@
 import React, { useEffect, useState } from "react";
-import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
-import { CoachingStyle, CoachingStyleTimechartData, RoundFeedback, StyleFeedback, TranscriptionData } from "../models/coaching-session/coaching-session.model";
+import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
+import { CoachingSession, CoachingStyle, CoachingStyleTimechartData, StyleFeedback } from "../models/coaching-session/coaching-session.model";
 import { coachingService } from "../services/report.service";
 import { message } from "antd";
-import { useParams } from "react-router-dom";
+import ImdLogo from '../assets/Imd-Logo.png';
+import styles from "./ReportDocument.styles";
 import {
   Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
+  ArcElement,
   LineElement,
-  Filler,
+  PointElement,
   Tooltip,
   Legend,
-  RadarController,
+  PieController,
+  LineController,
+  CategoryScale,
+  LinearScale,
 } from "chart.js";
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-  RadarController // Register the Radar controller
-);
-
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    padding: 20,
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    border: "1px solid #ccc",
-    borderRadius: 5,
-  },
-  header: {
-    fontSize: 18,
-    marginBottom: 10,
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  text: {
-    fontSize: 12,
-    marginBottom: 5,
-  },
-  chart: {
-    marginTop: 20,
-    width: "100%",
-    height: 200,
-  },
-});
-
-const dummyData = [
-  {
-    title: "Overall Intervention Analysis",
-    additionalContent: `
-      Range of Coaching Styles Used
-      
-      Catalytic
-      Informative
-      Supportive
-      Cathartic
-      Challenging
-      Prescriptive
-      
-      After reviewing your coaching session with Tania, it’s clear that you have a strong grasp of several effective coaching techniques, which you utilized to facilitate meaningful dialogue and reflection. Your application of the Catalytic and Informative styles was particularly effective, helping Tania to explore the situation from multiple perspectives and to deepen her understanding of the dynamics at play. You skillfully prompted her to consider how her counterpart might be viewing the situation, which is crucial for developing empathy and devising more effective strategies.
-      
-      However, there are opportunities to enhance your coaching by incorporating elements of other coaching styles like Supportive and Challenging styles. A more pronounced supportive approach could help reinforce Tania’s confidence and validate her efforts, which seem to be waning due to the ongoing challenges. Additionally, employing the challenging style could provoke critical reflection on Tania’s assumptions and perceived lack of options, potentially opening new avenues for action that she had not considered.
-      
-      While your approach facilitated a comprehensive exploration of the issues, further emphasis on emotional support (Cathartic style) and challenge could enhance the resilience and creativity of your coachees in facing complex interpersonal dilemmas. Engaging more deeply on an emotional level and pushing for reconsideration of fixed viewpoints could make your sessions even more impactful.
-      
-      Overall, your coaching technique shows a commendable level of sensitivity and adaptiveness to the needs of your coachee, and with continued practice and integration of a broader range of interventions, you are well-positioned to further enhance your effectiveness as a coach. Keep up the great work!
-    `,
-  },
-  {
-    title: "Detailed Intervention Analysis - 1",
-    additionalContent: `
-      Here's a comprehensive summary feedback touching on all six Heron coaching styles observed during the coaching session:
-      
-      1. Prescriptive: This style was underused. Given Tania’s feeling of being at an impasse, direct suggestions or specific strategies, such as methods for initiating a reset or handling adversarial dynamics, could provide Tania with clear steps and support in decision-making, especially useful when she feels stuck or overwhelmed.
-      2. Informative: You effectively utilized this style to extract and clarify details of the situation. Continuing to provide relevant information or introducing new knowledge, such as examples of successful relationship resets in similar professional settings, would further empower Tania in her decision-making processes.
-      3. Challenging: There's an opportunity to enhance the use of this style by more directly questioning Tania’s assumptions and perceived constraints. Encouraging her to explore alternative perspectives or to critically assess the feasibility of the "nuclear option" her colleague suggested could uncover hidden solutions and stimulate proactive changes.
-      4. Cathartic: Increasing the use of this style could help Tania express and process the emotional aspects of her challenges, potentially uncovering deeper personal insights and relieving stress, which would promote clearer thinking. Given the emotional charge of her situation, this could be particularly beneficial.
-      5. Catalytic: You effectively employed this style to encourage self-discovery and problem-solving. Further focus here could lead to more significant breakthroughs in Tania’s understanding and actions, especially around her interpretations of the adversarial dynamics and her team’s reactions.
-      6. Supportive: While general support was evident, a more focused application of this style could involve validating Tania's efforts and emotions, thereby enhancing her confidence and resilience in dealing with the situation. Recognizing her attempts to improve the relationship and affirming the difficulty of navigating such complex interpersonal dynamics would bolster her morale and persistence.
-    `,
-  },
-  {
-    title: "Detailed Intervention Analysis - 2",
-    additionalContent: `
-      Here's a comprehensive summary feedback touching on all six Heron coaching styles observed during the coaching session:
-      
-      1. Prescriptive: This style was underused. For instance, when Tania mentioned feeling stuck between resetting relationships and adopting a 'nuclear' strategy, you could have offered more concrete advice or strategies for conflict resolution, such as suggesting specific communication techniques or structured negotiation approaches.
-      2. Informative: You demonstrated this style when you prompted Tania to elaborate on when the relationship issues began, which helped clarify the timeline and contributing factors. Further information could have been provided on similar cases or strategies that proved successful in similar situations.
-      3. Challenging: This style was lightly used but could have been more pronounced. For instance, when Tania discussed the 'nuclear option', you could have challenged her by asking, "What are the potential long-term consequences of choosing this option over trying to repair the relationship?" This could help her weigh her options more critically.
-      4. Cathartic: There was a missed opportunity for this style when Tania mentioned feeling out of options. Prompting her to express more about her feelings, such as, "It sounds like this situation is really weighing on you; what emotions are you feeling the most right now?" could have provided emotional release and clearer thinking. Given the emotional charge of her situation, this could be particularly beneficial.
-      5. Catalytic: You used this style effectively by asking Tania to consider her counterpart’s perspective. Another catalytic question could have been, "What do you think are his biggest fears regarding your team’s approach?" to help her uncover deeper insights into his defensive behaviors.
-      6. Supportive: General support was evident, but more explicit validation could strengthen this style. Saying something like, "You've been very resilient in navigating these challenges; it's clear you care deeply about finding a solution," would affirm her efforts and bolster her confidence. Recognizing her attempts to improve the relationship and affirming the difficulty of navigating such complex interpersonal dynamics would bolster her morale and persistence.
-    `,
-  },
-];
+ChartJS.register(ArcElement, LineElement, PointElement, Tooltip, Legend, PieController, LineController, CategoryScale, LinearScale);
 
 
-interface ReportDocumentProps {
-  coaching_round_id: string;
-}
-
-
-const ReportDocument: React.FC<ReportDocumentProps> = ({ coaching_round_id }) => {
+const ReportDocument: React.FC<{coachingSession: CoachingSession, loading: boolean}> = ({ coachingSession, loading }) => {
   
-  const [roundFeedback, setRoundFeedback] = useState<RoundFeedback[]>([]);
+  const [roundFeedback, setRoundFeedback] = useState<String>("");
   const [styleFeedback, setStyleFeedback] = useState<StyleFeedback[]>([]);
-  const [styleStats, setStyleStats] = useState<CoachingStyle[][]>([]);
+  const [styleStats, setStyleStats] = useState<CoachingStyle[]>([]);
   const [styleTimechart, setStyleTimechart] = useState<CoachingStyleTimechartData[]>([]);
-  const [transcriptions, setTranscriptions] = useState<TranscriptionData[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [Loading, setLoading] = useState<boolean>(false);
 
-  const [chartImage, setChartImage] = useState<string | null>(null);
+  const [pieChartImage, setPieChartImage] = useState<string | null>(null);
+  const [lineChartImage, setLineChartImage] = useState<string | null>(null);
 
-  useEffect(() => {
-    const generateChartImage = async () => {
-      const canvas = new OffscreenCanvas(600, 400);
-      const context = canvas.getContext("2d");
+  const generatePieChartImage = async () => {
+   
+    if (!styleStats || styleStats.length === 0) {
+      return;
+    }
 
-      if (!context) {
-        console.error("Failed to get canvas rendering context");
-        return;
-      }
+    const labels = styleStats.map((item) => {
+      return item.name;
+    });
 
-      // Cast the context to CanvasRenderingContext2D
-      const castedContext = context as unknown as CanvasRenderingContext2D;
+    const dataValues = styleStats.map((item) => {
+      return item.value;
+    });
 
-      const chart = new ChartJS(castedContext, {
-        type: "radar", // Radar chart
-        data: {
-          labels: ["Catalytic", "Informative", "Supportive", "Cathartic", "Challenging", "Prescriptive"],
-          datasets: [
-            {
-              label: "Coaching Styles",
-              data: [40, 30, 20, 10, 15, 5],
-              backgroundColor: "rgba(84,112,221,0.4)",
-              borderColor: "rgb(84,112,221)",
-            },
-          ],
+    const canvas = new OffscreenCanvas(600, 400);
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      return;
+    }
+
+    new ChartJS(context as any, {
+      type: "pie",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Coaching Styles",
+            data: dataValues,
+            backgroundColor: [
+              "#ff595e", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93", "#ff924c",
+            ],
+            borderWidth: 1,
+            borderColor: "#ffffff",
+          },
+        ],
+      },
+      options: {
+        responsive: false,
+        animation: false,
+        layout: { padding: { bottom: 40 } },
+        plugins: {
+          legend: {
+            display: true,
+            position: "bottom",
+            align: "center",
+            labels: { boxWidth: 15, padding: 15, font: { size: 12 } },
+          },
         },
-        options: {
-          responsive: false,
-          animation: false, // Disable animations
-        },
-      });
+      },
+    });
 
-      const blob = await canvas.convertToBlob();
-      const dataURL = await new Promise<string>((resolve) => {
-        const fileReader = new FileReader();
-        fileReader.onload = (e) => resolve(e.target?.result as string);
-        fileReader.readAsDataURL(blob);
-      });
+    const blob = await canvas.convertToBlob();
+    const dataURL = await convertBlobToDataURL(blob);
+    setPieChartImage(dataURL);
+  };
+  
+  const generateLineChartImage = async (styleTimechart: CoachingStyleTimechartData[]) => {
+    console.log("Generating line chart...");
 
-      setChartImage(dataURL);
+    if (!styleTimechart || styleTimechart.length === 0) {
+      console.error("No data available for chart.");
+      return;
+    }
+
+    const canvas = new OffscreenCanvas(600, 400);
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      console.error("Failed to get canvas rendering context");
+      return;
+    }
+
+    // Dynamically extract labels and data from `styleTimechart`
+    //@ts-ignore
+    const labels = styleTimechart.map((entry) => entry.ax.toString()); // X-axis labels (time in minutes)
+    //@ts-ignore
+    const dataValues = styleTimechart.map((entry) => entry.ay); // Y-axis values (coaching styles)
+
+    // Define y-axis mapping
+    const yAxisMapping = {
+      10: "Supportive",
+      20: "Informative",
+      30: "Catalytic",
+      40: "Prescriptive",
+      50: "Challenging",
+      60: "Cathartic",
     };
 
-    generateChartImage();
-  }, []);
+    // Create the chart
+    new ChartJS(context as any, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Time (Mins.)",
+            data: dataValues,
+            borderColor: "#36A2EB",
+            borderWidth: 2,
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        responsive: false,
+        animation: false,
+        elements: {
+          line: {
+            stepped: "before",
+          },
+        },
+        scales: {
+          y: {
+            ticks: {
+              callback: function (value) {
+                //@ts-ignore
+                return yAxisMapping[value] || ""; // Show mapped coaching styles
+              },
+              stepSize: 10,
+              autoSkip: false,
+            },
+          },
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: "Coaching Style Over Time",
+          },
+        },
+      },
+    });
 
-  // Example roundId for demonstration
+    // ✅ Ensure `convertBlobToDataURL` is defined
+    const convertBlobToDataURL = (blob: Blob): Promise<string> => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+      });
+    };
+
+    const blob = await canvas.convertToBlob();
+    const dataURL = await convertBlobToDataURL(blob);
+    setLineChartImage(dataURL);
+  };
+
+  const convertBlobToDataURL = (blob: Blob): Promise<string> => {
+    return new Promise((resolve) => {
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => resolve(e.target?.result as string);
+      fileReader.readAsDataURL(blob);
+    });
+  };
  
-  const roundId = coaching_round_id;
-  const coachingSessionName = "IMD12%20-%20Group%2012"
+  const roundId = coachingSession.coaching_round_id;
 
-  // Fetch all the data in parallel using Promise.all
   const fetchReportData = async () => {
     try {
       setLoading(true);
 
-      if (!coaching_round_id) {
+      if (!roundId) {
         message.error("Coaching round ID is missing.");
         return;
       }
 
-      const [
-        feedbackRes,
-        styleStatsRes,
-        styleTimechartRes,
-        transcriptionsRes,
-      ] = await Promise.all([
+      const [feedbackRes, styleStatsRes, styleTimechartRes] = await Promise.all([
         coachingService.fetchFeedback({ roundId }),                  // 1. Feedback
         coachingService.getCoachingStyleStats({ coachingRoundId: roundId }), // 2. Style Stats
         coachingService.getCoachingStyleTimechart({ roundId }),              // 3. Timechart
-        coachingService.getTranscriptions({ coachingSessionName: coachingSessionName }), // 4. Transcriptions
       ]);
 
       // 1. Feedback
       if (feedbackRes.success && feedbackRes.data) {
-        setRoundFeedback(feedbackRes.data.roundFeedback || []);
+        const feedback = feedbackRes.data.roundFeedback[0]?.feedback_improvements;
+        setRoundFeedback(feedback || "");
         setStyleFeedback(feedbackRes.data.styleFeedback || []);
       }
 
       // 2. Style Stats
       if (styleStatsRes.success && styleStatsRes.data) {
-        setStyleStats(styleStatsRes.data);
+        const transformedData = transformPieChartData(styleStatsRes.data);
+        setStyleStats(transformedData);
       }
 
       // 3. Style Timechart
       if (styleTimechartRes.success && styleTimechartRes.data) {
-        setStyleTimechart(styleTimechartRes.data);
-      }
-
-      // 4. Transcriptions
-      if (transcriptionsRes.success && transcriptionsRes.data) {
-        setTranscriptions(transcriptionsRes.data);
+        const transformedData = transformStyleChartData(styleTimechartRes.data);
+        setStyleTimechart(transformedData);
       }
     } catch (error: any) {
       message.error(error.message || "Failed to fetch report data.");
@@ -219,30 +229,180 @@ const ReportDocument: React.FC<ReportDocumentProps> = ({ coaching_round_id }) =>
     }
   };
 
-  // Call fetchReportData when component mounts
+ const transformStyleChartData = (data: any[]) => {
+  const coachingStyleMapping: { [key: string]: number } = {
+    Supportive: 10,
+    Informative: 20,
+    Catalytic: 30,
+    Prescriptive: 40,
+    Challenging: 50,
+    Cathartic: 60
+  };
+
+  const transformedData: any[] = data.map((item) => {
+    const coachingStyle = item.coaching_style?.trim(); // Ensure no leading/trailing spaces
+    const ayValue = coachingStyleMapping[coachingStyle]; // Map the value
+
+    if (ayValue === undefined) {
+      console.warn(`Undefined coaching style: ${coachingStyle}`); // Debugging
+    }
+
+    return {
+      ax: item.section, // Keeping 'ax' as section
+      ay: ayValue ?? null, // If mapping fails, use null instead of undefined
+      alias: coachingStyle || "Unknown" // Avoid undefined alias
+    };
+  });
+
+  return transformedData;
+  };
+
+  const transformPieChartData = (resultround: any[]) => {
+     
+      if (!resultround || resultround.length === 0) {
+          return [];
+      }
+
+      // @ts-ignore: Suppressing TypeScript warning
+      let roundSeries = [];
+
+      resultround.forEach((round, index) => {
+        
+          if (round.rows.length > 0) {
+              
+              // @ts-ignore: Suppressing TypeScript warning
+              roundSeries = round.rows.map((style: { coaching_style: string; percentage: number }) => {
+                  
+                  return {
+                      name: style.coaching_style,
+                      value: parseFloat((style.percentage * 100).toFixed(2))
+                  };
+              });
+          }
+      });
+
+      if (roundSeries.length === 0) {
+          console.warn("No valid data found in any round.");
+      }
+  
+    // @ts-ignore: Suppressing TypeScript warning
+      return roundSeries;
+  };
+
   useEffect(() => {
     fetchReportData();
   }, []);
 
+  useEffect(() => {
+    if (styleStats.length > 0) {
+      generatePieChartImage();
+    }
+  }, [styleStats]);
+
+  useEffect(() => {
+    if (styleTimechart.length > 0) {
+      generateLineChartImage(styleTimechart);
+    }
+  }, [styleTimechart]);
+
+  if (loading) {
+    return (
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <Text style={styles.loadingText}>Generating report, please wait...</Text>
+        </Page>
+      </Document>
+    );
+  }
+
 
   return (
+
     <Document>
-    {dummyData.map((pageData, index) => (
-      <Page size="A4" style={styles.page} key={index}>
-        <View style={styles.section}>
-          <Text style={styles.header}>{pageData.title}</Text>
-          <Text style={styles.text}>{pageData.additionalContent}</Text>
+      {/* Page 1: Overall Intervention Analysis */}
+      <Page size="A4" style={styles.page}>
+        <Image src={ImdLogo} style={styles.logo} />
+        <Text style={styles.title}>OVERALL INTERVENTION ANALYSIS</Text>
+
+        {/* Details Section */}
+        <View style={styles.detailsCard}>
+          
+          <View style={styles.detailsRow}>
+            <View style={styles.detailsColumn}>
+              <View style={styles.detailsItem}>
+                <Text style={styles.detailsKey}>Team:</Text>
+                <Text style={styles.detailsValue}>{coachingSession.coaching_session_name }</Text>
+              </View>
+            </View>
+            <View style={styles.detailsColumn}>
+              <View style={styles.detailsItem}>
+                <Text style={styles.detailsKey}>Coach:</Text>
+                <Text style={styles.detailsValue}>{coachingSession.coachee_name }</Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.detailsRow}>
+            <View style={styles.detailsColumn}>
+              <View style={styles.detailsItem}>
+                <Text style={styles.detailsKey}>Date:</Text>
+                <Text style={styles.detailsValue}> {coachingSession.date 
+                  ? new Intl.DateTimeFormat("en-US", { 
+                      year: "numeric", 
+                      month: "long", 
+                      day: "numeric" 
+                    }).format(new Date(coachingSession.date)) 
+                  : "N/A"
+                }</Text>
+              </View>
+            </View>
+            <View style={styles.detailsColumn}>
+              <View style={styles.detailsItem}>
+                <Text style={styles.detailsKey}>Round:</Text>
+                <Text style={styles.detailsValue}>{coachingSession.round }</Text>
+              </View>
+            </View>
+          </View>
         </View>
 
-        {/* Render the generated chart image */}
-        {chartImage && (
-          <View style={styles.section}>
-            <Image src={chartImage} style={styles.chart} />
-          </View>
-        )}
+        {/* Pie Chart Analysis */}
+        <View>
+          <Text style={styles.sectionTitle}>Coaching Style Distribution</Text>
+          {pieChartImage && <Image src={pieChartImage} style={styles.chart} />}
+        </View>
       </Page>
-    ))}
-  </Document>
+
+      {/* Page 2: Performance and Round Feedback */}
+      <Page size="A4" style={styles.page}>
+        <Image src={ImdLogo} style={styles.logo} />
+        <Text style={styles.title}>OVERALL INTERVENTION ANALYSIS</Text>
+        <View>
+          <Text style={styles.sectionTitle}>Performance Trends</Text>
+          {lineChartImage && <Image src={lineChartImage} style={styles.linechart} />}
+        </View>
+        <View>
+          <Text style={styles.sectionTitle}>Round-Specific Feedback</Text>
+          <Text style={styles.roundfeedbackText}>{roundFeedback}</Text>
+        </View>
+      </Page>
+
+      {/* Page 3: Detailed Intervention Analysis */}
+      <Page size="A4" style={styles.page}>
+        <Image src={ImdLogo} style={styles.logo} />
+        <Text style={styles.title}>DETAILED INTERVENTION ANALYSIS</Text>
+        <Text style={styles.sectionTitle}>Coaching Style Feedback</Text>
+        <View>
+          {styleFeedback.map((item, index) => (
+            <View key={index} style={[styles.feedbackContainer, index % 2 === 0 ? styles.greyBackground : styles.whiteBackground]}>
+              <Text style={styles.feedbackTitle}>{index + 1}. {item.coaching_style}:</Text>
+              <Text style={styles.feedbackText}>{item.style_explanation}</Text>
+            </View>
+          ))}
+        </View>
+      </Page>
+
+      
+    </Document>
+
   )
 };
 

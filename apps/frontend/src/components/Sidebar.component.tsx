@@ -1,42 +1,47 @@
 import React, { useState } from "react";
 import {
   MailOutlined,
-  SettingOutlined,
-  StarOutlined,
   UserOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
-import { Menu, Avatar, Button } from "antd";
+import { Menu, Avatar} from "antd";
 import type { MenuProps } from "antd";
 import { useRecoilValue } from "recoil";
 import { authState } from "../recoil/atoms/auth.atom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const items: MenuItem[] = [
   {
-    key: "1",
+    key: "/",
+    icon: <UploadOutlined/>,
+    label: "Upload",
+  },
+  {
+    key: "/feedback",
     icon: <MailOutlined />,
-    label: "Home",
-  },
-  {
-    key: "2",
-    icon: <StarOutlined />,
-    label: "Favourites",
-  },
-  {
-    key: "3",
-    icon: <SettingOutlined />,
-    label: "Settings",
+    label: "Feedback & Reports",
   },
 ];
 
 const Sidebar: React.FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false); // State for collapsing sidebar
-  const auth = useRecoilValue(authState);
 
-  const toggleCollapse = () => setIsCollapsed(!isCollapsed);
+  const location = useLocation(); 
+  const navigate = useNavigate(); 
+  const [stateOpenKeys, setStateOpenKeys] = useState([location.pathname]); 
+  const auth = useRecoilValue(authState); 
+  const [isCollapsed, setIsCollapsed] = useState(false); 
+
+
+  const onOpenChange: MenuProps["onOpenChange"] = (openKeys) => {
+    setStateOpenKeys(openKeys);
+  };
+
+  const handleMenuClick: MenuProps["onClick"] = (e) => {
+    navigate(e.key); 
+  };
+
 
   return (
     <div
@@ -44,21 +49,19 @@ const Sidebar: React.FC = () => {
         isCollapsed ? "w-16" : "w-64"
       } transition-all duration-300`}
     >
-      {/* Toggle Button */}
-      <div className="flex items-center justify-center p-4 border-b">
-        <Button
-          type="text"
-          icon={isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          onClick={toggleCollapse}
-        />
+
+      <div className="flex items-center justify-center p-5 border-b  text-blue-800 text-xl font-semibold">
+        <h2>Skill Score AI</h2>
       </div>
 
       {/* Menu */}
       <Menu
         mode="inline"
-        defaultSelectedKeys={["1"]}
-        className="flex-1"
-        inlineCollapsed={isCollapsed}
+        selectedKeys={[location.pathname]} 
+        openKeys={stateOpenKeys}
+        onOpenChange={onOpenChange}
+        onClick={handleMenuClick} 
+        style={{ flex: 1 }}
         items={items}
       />
 

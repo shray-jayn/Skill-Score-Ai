@@ -4,7 +4,7 @@ import { UploadOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useSetRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { authState } from "../recoil/atoms/auth.atom";
-import UploadComponent from "../components/Upload.component";
+import UploadModalComponent from "./UploadModal.component";
 
 const { Search } = Input;
 
@@ -41,8 +41,8 @@ const TopNavBar: React.FC = () => {
         <div className="w-full md:w-1/4 mb-4 md:mb-0 flex justify-center md:justify-start">
           <div>
             <img
-              src=""
-              alt="Skill-Score-Ai"
+              src="https://www.graduatesfirst.com/wp-content/uploads/2024/02/IMD-Horizontal-Lockup-Blue-on-White-Safe-Space-RGB.jpg"
+              alt="Skill Score Ai"
               className="w-32 "
               onClick={handleIconClick}
             />
@@ -58,7 +58,7 @@ const TopNavBar: React.FC = () => {
             className="w-full md:w-3/4 lg:w-1/2"
             loading
           /> */}
-          <h2>SkillScore.Ai</h2>
+          {/* <h2>CoachLens.AI</h2> */}
 
         </div>
 
@@ -91,7 +91,7 @@ const TopNavBar: React.FC = () => {
         footer={null} // Remove default footer buttons
         width={600}
       >
-        <UploadComponent />
+        <UploadModalComponent />
       </Modal>
     </>
   );

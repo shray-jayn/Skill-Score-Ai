@@ -6,7 +6,7 @@ const Home: React.FC = () => {
   return (
     <MainLayout>      
       <div>
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">Reports</h2>
+        {/* <h2 className="text-2xl font-semibold text-gray-700 mb-4">Feedback</h2> */}
         <RecentFilesTable />
       </div>
     </MainLayout>
