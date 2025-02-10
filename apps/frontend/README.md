@@ -1,50 +1,132 @@
-# React + TypeScript + Vite
+# 📂 **Skill Score AI - Frontend**  
+A **modern AI-powered coaching feedback platform** built with **React**, powered by a **FastAPI backend**, and managed in a **TurboRepo monorepo**. Skill Score AI enables users to securely upload coaching sessions, analyze feedback, and generate structured reports.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Skill Score AI Banner](screenshots/banner.png)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 **Features**
+✅ Secure user authentication with JWT  
+✅ Intuitive **file upload** with real-time processing  
+✅ **AI-powered coaching insights** using OpenAI  
+✅ **Audio & transcript analysis** with AssemblyAI  
+✅ **Dashboard for coaching feedback visualization**  
+✅ **Report generation** for coaching rounds  
+✅ **Recoil state management** for real-time updates  
+✅ **Ant Design & TailwindCSS** for a sleek UI  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 📦 **Tech Stack**
+- **Frontend**: React, Vite, TailwindCSS, Recoil, React Router, Ant Design  
+- **Backend**: FastAPI, NestJS
+- **Build Tool**: TurboRepo  
+- **State Management**: Recoil  
+- **API Calls**: Axios  
 
-- Configure the top-level `parserOptions` property like this:
+---
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🎨 **Screenshots**
+Here are some screenshots of the frontend interface:
+
+### 📁 **Dashboard View**
+![Dashboard Screenshot](screenshots/dashboard.png)
+
+### 📤 **File Upload**
+![File Upload Screenshot](screenshots/upload.png)
+
+### 📊 **Coaching Feedback**
+![Coaching Feedback Screenshot](screenshots/feedback.png)
+
+### 📄 **Report Generation**
+![Report Screenshot](screenshots/report.png)
+
+*(Ensure these screenshots are available in your repo under the `screenshots/` folder.)*
+
+---
+
+## 🛠 **Installation & Setup**
+
+### ⚡ **Prerequisites**
+- Node.js `>= 18`
+- PNPM / Yarn / NPM (preferred: `pnpm`)
+- TurboRepo installed globally _(optional)_
+
+### 🏗️ **Step 1: Clone the repository**
+```sh
+git clone https://github.com/shray-jayn/Skill-Score-Ai.git
+cd Skill-Score-Ai
+cd apps/frontend
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### 🚀 **Step 2: Install dependencies**
+Using PNPM:
+```sh
+pnpm install
 ```
+Or with Yarn:
+```sh
+yarn install
+```
+
+### 🏃 **Step 3: Start the frontend app**
+```sh
+pnpm dev  # or yarn dev
+```
+Your Skill Score AI frontend will be running at **`http://localhost:5173`** (default Vite port).
+
+---
+
+## 🏗 **Build for Production**
+To build the frontend:
+```sh
+pnpm build  # or yarn build
+```
+For a preview of the production build:
+```sh
+pnpm preview  # or yarn preview
+```
+
+---
+
+## 📜 **Folder Structure**
+```
+/skill-score-ai
+  ├── /apps
+  │   ├── /frontend           # React app (this repo)
+  │   ├── /backend            # NestJs backend 
+  │   ├── /fastapi-backend    # FastAPI backend
+  ├── /packages
+  ├── turbo.json      # TurboRepo config
+  ├── package.json
+  ├── README.md
+```
+
+---
+
+## 🔍 **Linting & Code Quality**
+Run ESLint to check for code issues:
+```sh
+pnpm lint
+```
+
+---
+
+## 💡 **Contributing**
+🚀 We welcome contributions! Feel free to:
+- Open an **issue** for bug reports or feature requests  
+- Create a **pull request** with your improvements  
+
+---
+
+## 📜 **License**
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 💌 **Contact & Support**
+Have questions or suggestions?  
+Reach out via **[shrayjayn1@gmail.com](mailto:shrayjayn1@gmail.com)** or open an issue.
+
+---
+
