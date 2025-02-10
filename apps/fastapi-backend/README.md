@@ -47,8 +47,11 @@ Ensure you have the following installed:
 ### 📥 Clone Repository
 
 ```sh
-git clone https://github.com/yourusername/skill-score-ai.git
+git clone https://github.com/shray-jayn/Skill-Score-Ai.git
 cd skill-score-ai
+cd apps
+cd fastapi-backend
+
 ```
 
 ### 📦 Install Dependencies
