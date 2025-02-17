@@ -1,73 +1,157 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 🚀 **Skill Score AI - Backend**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Skill Score AI is an **AI-driven coaching analytics platform** designed to analyze and enhance coaching sessions. This repository contains the **backend**, built using **NestJS** with **Prisma ORM** and **PostgreSQL**, operating in a **Turborepo** monorepo setup.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 📦 **What's Inside?**
+This backend includes:
+- **NestJS** framework for a structured and scalable backend
+- **PostgreSQL** as the database with Prisma ORM
+- **JWT authentication** for secure API access
+- **Azure Storage integration** for secure file storage
+- **RESTful API endpoints** to manage coaching sessions, transcriptions, and analytics
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### **Tech Stack**
+- **Backend Framework**: NestJS  
+- **Database**: PostgreSQL (managed with Prisma ORM)  
+- **Authentication**: JWT-based authentication  
+- **Storage**: Azure Blob Storage  
+- **Testing**: Jest  
+- **CI/CD**: Docker (optional deployment setup)  
 
-## Installation
+---
 
-```bash
-$ npm install
+## 🚀 **Skill Score AI Features**
+✅ **Coaching Session Tracking** (Monitor individual and team coaching sessions)  
+✅ **AI-powered Coaching Analytics** (Provides insights based on transcriptions)  
+✅ **Transcription Analysis** (Extracts key coaching styles and performance metrics)  
+✅ **Secure Authentication** (JWT-based authentication)  
+✅ **Session Feedback Management** (Stores session improvements & detailed feedback)  
+✅ **File Uploads & Storage** (Azure Blob Storage integration)  
+✅ **Search API** to find coaching sessions efficiently  
+✅ **Role-based Access Control** (Admin/Coach/User roles)  
+
+---
+
+## 🛠 **Setup & Installation**
+### ⚡ **Prerequisites**
+- Node.js `>= 18`
+- PostgreSQL `>= 14`
+- Azure Storage Account setup
+- PNPM / Yarn / NPM (preferred: `pnpm`)
+
+### 🏗️ **Setup Locally**
+1. **Clone the repository**
+```sh
+git clone https://github.com/shray-jayn/Skill-Score-Ai.git
+cd skill-score-ai
+cd apps
+cd backend
+```
+2. **Install dependencies**
+```sh
+pnpm install
+```
+3. **Setup environment variables**
+Create a `.env` file in the root directory and configure it with required values (database credentials, Azure storage, JWT, etc.).
+
+4. **Run database migrations**
+```sh
+pnpm prisma migrate dev
 ```
 
-## Running the app
+5. **Start the backend server**
+```sh
+pnpm dev  # or yarn dev
+```
+Your Skill Score AI backend will be running at **`http://localhost:3000`**.
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## 📜 **API Routes**
+### 🔐 **Authentication**
+- `POST /users/register` - User registration
+- `POST /users/login` - User login
 
-# production mode
-$ npm run start:prod
+### 🎯 **Coaching Sessions**
+- `POST /coaching/fetch-sessions` - Fetch coaching sessions
+- `POST /coaching/fetch-feedback` - Fetch coaching feedback
+- `GET /coaching/coaching-style-stats/:coachingRoundId` - Get coaching style statistics
+- `GET /coaching/coaching-style-timechart/:roundId` - Get coaching style timechart
+- `GET /coaching/transcriptions/:coachingSessionName` - Fetch transcriptions
+
+### 🔎 **Search API**
+- `POST /search` - Search for coaching sessions
+
+### 📂 **File Management**
+- `POST /upload/files/generate-upload-url` - Generate upload URL for Azure Storage
+- `POST /file/fetch-sessions` - Fetch file sessions
+
+---
+
+## 🏗 **Build for Production**
+To build the backend:
+```sh
+pnpm build  # or yarn build
 ```
 
-## Test
+---
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+## 🔍 **Linting & Code Quality**
+Run ESLint to check for code issues:
+```sh
+pnpm lint
 ```
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## ⚡ **Remote Caching** (Optional for Monorepo)
+Turborepo can use **Remote Caching** to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
-## Stay in touch
+By default, Turborepo caches locally. To enable **Remote Caching**, you need a **Vercel** account. If you don't have an account, create one and enter the following commands:
+```sh
+cd skill-score-ai
+npx turbo login
+```
+This will authenticate the Turborepo CLI with your Vercel account.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Next, link your Turborepo to **Remote Cache** by running:
+```sh
+npx turbo link
+```
 
-## License
+---
 
-Nest is [MIT licensed](LICENSE).
+## 📜 **Folder Structure**
+```
+/skill-score-ai
+  ├── /apps
+  │   ├── /backend   # NestJS backend (this repo)
+  ├── /packages
+  ├── prisma        # Prisma schema & migrations
+  ├── .env           # Environment variables
+  ├── package.json   # Dependencies & scripts
+  ├── README.md      # Documentation
+```
+
+---
+
+## 💡 **Contributing**
+🚀 We welcome contributions! Feel free to:
+- Open an **issue** for bug reports or feature requests  
+- Create a **pull request** with your improvements  
+
+---
+
+## 📜 **License**
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 💌 **Contact & Support**
+Have questions or suggestions?  
+Reach out via **[shrayjayn1@gmail.com](mailto:shrayjayn1@gmail.com)** or open an issue.
+
+---
+
