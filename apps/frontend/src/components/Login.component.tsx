@@ -2,7 +2,7 @@ import React from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import { authService } from "../services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { authState } from "../recoil/atoms/auth.atom";
 
@@ -54,9 +54,9 @@ const LoginComponent: React.FC = () => {
 
       <div className="w-full flex justify-center mb-12">
         <img
-          src="https://www.graduatesfirst.com/wp-content/uploads/2024/02/IMD-Horizontal-Lockup-Blue-on-White-Safe-Space-RGB.jpg"
+          src="https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_640.png"
           alt="Skill Score Ai"
-          className="w-48"
+          className="w-32"
         />
       </div>
 
@@ -116,9 +116,7 @@ const LoginComponent: React.FC = () => {
       
       <p className="mt-4 text-sm">
         Don’t have an account yet?{" "}
-        <a href="/signup" className="text-blue-600">
-          Sign Up
-        </a>
+        <Link className="text-blue-600" to="/signup">Sign Up</Link>
       </p>
     </div>
   );

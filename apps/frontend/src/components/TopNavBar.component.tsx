@@ -38,16 +38,16 @@ const TopNavBar: React.FC = () => {
     <>
       <div className="flex flex-col md:flex-row items-center bg-white p-4 border-b shadow-sm">
         {/* Left Placeholder */}
-        <div className="w-full md:w-1/4 mb-4 md:mb-0 flex justify-center md:justify-start">
+        {/* <div className="w-full md:w-1/4 mb-4 md:mb-0 flex justify-center md:justify-start">
           <div>
             <img
-              src="https://www.graduatesfirst.com/wp-content/uploads/2024/02/IMD-Horizontal-Lockup-Blue-on-White-Safe-Space-RGB.jpg"
-              alt="Skill Score Ai"
-              className="w-32 "
+              src="https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_640.png"
+              alt="IMD"
+              className="w-11"
               onClick={handleIconClick}
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Centered Search Input */}
         <div className="w-full md:flex-1 flex justify-center mb-4 md:mb-0 text-blue-800 text-xl font-semibold">

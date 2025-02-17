@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Form, Input, Checkbox, message } from "antd";
 import { authService } from "../services/auth.service"; 
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate, Link } from "react-router-dom"; 
 import { useSetRecoilState } from "recoil";
 import { authState } from "../recoil/atoms/auth.atom";
 
@@ -43,13 +43,13 @@ const SignUpComponent: React.FC = () => {
   return (
     <div>
       {/* Heading */}
-      <div className="w-full flex justify-center mb-8">
+      {/* <div className="w-full flex justify-center mb-8">
         <img
-          src="https://www.graduatesfirst.com/wp-content/uploads/2024/02/IMD-Horizontal-Lockup-Blue-on-White-Safe-Space-RGB.jpg"
+          src="https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_640.png"
           alt="Skill Score Ai"
-          className="w-48"
+          className="w-10"
         />
-      </div>  
+      </div>   */}
 
       <p className="text-3xl font-medium mb-2 text-center">Get Started Now</p>
       <p className="text-gray-500 mb-6 text-center">
@@ -161,10 +161,7 @@ const SignUpComponent: React.FC = () => {
       </Form>
 
       <p className="text-center text-sm mt-4">
-        Have an account?{" "}
-        <a href="/login" className="text-blue-600 hover:underline">
-          Sign in
-        </a>
+        Have an account? <Link className="text-blue-600" to="/login">Sign In</Link>
       </p>
     </div>
   );

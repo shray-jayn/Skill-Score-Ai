@@ -12,6 +12,7 @@
   "dependencies": {
     "@azure/storage-blob": "^12.26.0",
     "@react-pdf/renderer": "^4.1.6",
+    "@splidejs/react-splide": "^0.7.12",
     "antd": "^5.22.5",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",

@@ -51,7 +51,7 @@ const Sidebar: React.FC = () => {
     >
 
       <div className="flex items-center justify-center p-5 border-b  text-blue-800 text-xl font-semibold">
-        <h2>Skill Score AI</h2>
+        <h2>SkillScore.AI</h2>
       </div>
 
       {/* Menu */}
