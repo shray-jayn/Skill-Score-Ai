@@ -9,7 +9,8 @@ import {
     AnalyzeResponse,
   } from "../models/upload/upload.model";
   import apiClient from "./api.service";
-  
+  import axios from "axios";
+
   export const uploadService = {
   
     // Check team name
@@ -51,14 +52,33 @@ import {
     },
   
     // Analyze
-    async analyze(payload: AnalyzeRequest): Promise<AnalyzeResponse> {
+    // async analyze(payload: AnalyzeRequest): Promise<AnalyzeResponse> {
+    //   try {
+    //     const response = await apiClient.post<AnalyzeResponse>("/analyze", payload);
+    //     return response.data;
+    //   } catch (error) {
+    //     console.error("Analyze operation failed:", error);
+    //     throw new Error("Unable to analyze. Please try again.");
+    //   }
+    // },
+
+
+     async analyze(payload: AnalyzeRequest): Promise<AnalyzeResponse> {
       try {
-        const response = await apiClient.post<AnalyzeResponse>("/analyze", payload);
+        const response = await axios.post<AnalyzeResponse>(
+          "https://api.skillscoreaianalyze.shray.tech/analyze",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         return response.data;
       } catch (error) {
         console.error("Analyze operation failed:", error);
         throw new Error("Unable to analyze. Please try again.");
       }
-    },
+    }
   };
   
