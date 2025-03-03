@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    apiBaseUrl: "http://localhost:80/",
+    apiBaseUrl: "https://api.skillscoreai.shray.tech/",
 };
